@@ -24,7 +24,7 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
     config_entry: ConfigEntry
-    token = None # auth token
+    token = None  # auth token
 
     def __init__(
         self,
@@ -47,22 +47,17 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
             # return await self.client.async_get_last_transmit()
 
             # start by getting a new token for all the next calls
-            self.token = await self.client.token()["access_token"]
+            response = await self.client.token()
+            LOGGER.debug("received data from token %s", response)
+
+            self.token = response["access_token"]
 
             # also get last transmit at this point
             LOGGER.debug("received access token from API %s", self.token)
 
             # now get some initial data to populate some sensors
             data = {}
-            for unit in self.units:
-                unitnumber = unit["unitnumber"]
-                data[unitnumber] = await self.client.async_get_last_transmit(unitnumber)
-                LOGGER.debug(
-                    "received data for unit %s from API %s",
-                    unitnumber,
-                    data[unitnumber],
-                )
-
+            # TODO now get some actual data here
             return data
 
         except MyLuminusApiClientAuthenticationError as exception:

@@ -7,6 +7,8 @@ import socket
 import aiohttp
 import async_timeout
 
+from .const import LOGGER
+
 
 class MyLuminusApiClientError(Exception):
     """Exception to indicate a general API error."""
@@ -51,24 +53,27 @@ class MyLuminusApiClient:
         there is also a refresh option where you put grant_type=refresh_token and refresh_token=current_token
         """
         return await self._api_wrapper(
-            method="post",
+            method="POST",
             url="https://mobileapi.luminus.be/token",
-            data={
-                "grant_type":"password",
-                "username":self.username,
-                "password":self.password,
-            }
+            # this call doesn't take json but url encoded form data
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            data="grant_type=password&username="
+            + self._username
+            + "&password="
+            + self._password,
         )
 
     async def contracts(self, token) -> any:
         """
         get an overview of contracts for this client.
-            
+
         GET https://mobileapi.luminus.be/api/v11/GetContracts
-            
-        { 
+
+        {
             "Contracts": [{
-                "Ean":"****", 
+                "Ean":"****",
                 "EnergyType":"Electricity",
                 "Product":"Comfy Plugin Pro",
                 "PriceVariability":"Fixed",
@@ -80,12 +85,10 @@ class MyLuminusApiClient:
         """
         return await self._api_wrapper(
             method="get",
-            headers={
-                "authorization:", "Bearer "+token
-            },
+            headers={"authorization:", "Bearer " + token},
             url="https://mobileapi.luminus.be/api/v11/GetContracts",
         )
-    
+
     async def meters(self, token) -> any:
         """
         gets a list of available meters
@@ -104,7 +107,7 @@ class MyLuminusApiClient:
             method="get",
             url="https://mobileapi.luminus.be/api/v11/GetMetersConsumptionSources",
         )
-    
+
     async def budget(self, token) -> any:
         """
         GET https://mobileapi.luminus.be/api/v11/GetBudgetBillLines
@@ -145,13 +148,11 @@ class MyLuminusApiClient:
         """
         return await self._api_wrapper(
             method="get",
-            headers={
-                "authorization:", "Bearer "+token
-            },
+            headers={"authorization:", "Bearer " + token},
             url="https://mobileapi.luminus.be/api/v11/GetBudgetBillLines",
         )
-    
-    async def accountStatements(self, token)->any:
+
+    async def accountStatements(self, token) -> any:
         """
         GET https://mobileapi.luminus.be/api/v11/GetAccountStatement
 
@@ -166,7 +167,7 @@ class MyLuminusApiClient:
             "Payments": []
         }
         """
-    
+
     # TODO create service(?) to push inserting meter readings (from P1, manual...)
     # POST https://mobileapi.luminus.be/api/v11/InsertMeterReading
 
@@ -190,16 +191,14 @@ class MyLuminusApiClient:
     # https://mobileapi.luminus.be/api/v11/GetServicesOverview
     # https://mobileapi.luminus.be/api/v11/GetDynamicMenu
     # https://mobileapi.luminus.be/api/v11/GetUrlList
-    
-
-
 
     async def _api_wrapper(
         self,
         method: str,
         url: str,
-        data: dict | None = None,
         headers: dict | None = None,
+        data: dict | None = None,
+        json: dict | None = None,
     ) -> any:
         """Get information from the API."""
         try:
@@ -208,7 +207,8 @@ class MyLuminusApiClient:
                     method=method,
                     url=url,
                     headers=headers,
-                    json=data,
+                    data=data,
+                    json=json,
                 )
                 if response.status in (401, 403, 601):
                     raise MyLuminusApiClientAuthenticationError(
@@ -222,8 +222,11 @@ class MyLuminusApiClient:
                 "Timeout error fetching information",
             ) from exception
         except (aiohttp.ClientError, socket.gaierror) as exception:
+            LOGGER.debug("received error is %s", exception)
             raise MyLuminusApiClientCommunicationError(
                 "Error fetching information",
             ) from exception
         except Exception as exception:  # pylint: disable=broad-except
-            raise MyLuminusApiClientError("Something really wrong happened!") from exception
+            raise MyLuminusApiClientError(
+                "Something really wrong happened!"
+            ) from exception

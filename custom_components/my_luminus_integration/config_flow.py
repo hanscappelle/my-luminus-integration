@@ -33,6 +33,7 @@ class MyLuminusIntegrationConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     username=user_input[CONF_USERNAME],
                     password=user_input[CONF_PASSWORD],
                 )
+                LOGGER.debug("logon on API Ok")
             except MyLuminusApiClientAuthenticationError as exception:
                 LOGGER.warning(exception)
                 _errors["base"] = "auth"
