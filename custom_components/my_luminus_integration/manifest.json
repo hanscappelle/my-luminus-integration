@@ -1,0 +1,12 @@
+{
+  "domain": "my_luminus_integration",
+  "name": "My Luminus Integration",
+  "codeowners": [
+    "@hanscappelle"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/hanscappelle/my-luminus-integration",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/hanscappelle/my-luminus-integration/issues",
+  "version": "0.1.0"
+}

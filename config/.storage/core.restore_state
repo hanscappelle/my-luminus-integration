@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "core.restore_state",
+  "data": [
+    {
+      "state": {
+        "entity_id": "person.hans",
+        "state": "unknown",
+        "attributes": {
+          "editable": true,
+          "id": "hans",
+          "user_id": "f28a726a01f947e599066689d23ae819",
+          "friendly_name": "hans"
+        },
+        "last_changed": "2023-07-31T10:23:15.463912+00:00",
+        "last_updated": "2023-07-31T10:23:16.800158+00:00",
+        "context": {
+          "id": "01H6NQJFA0SBV19EK6VQR7XPKS",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-07-31T10:25:54.891449+00:00"
+    }
+  ]
+}

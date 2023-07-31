@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace",
+  "data": {
+    "config": {
+      "title": "Home",
+      "views": [
+        {
+          "path": "default_view",
+          "title": "Home",
+          "cards": [
+            {
+              "type": "entities",
+              "entities": [
+                "person.hans"
+              ]
+            },
+            {
+              "type": "entities",
+              "entities": [
+                "sensor.altitude_798124",
+                "binary_sensor.chargecomplete_798124",
+                "binary_sensor.charging_798124",
+                "sensor.chargingtimeleft_798124",
+                "binary_sensor.gps_connected_798124",
+                "binary_sensor.gps_valid_798124",
+                "sensor.heading_798124",
+                "sensor.latitude_798124",
+                "sensor.longitude_798124",
+                "sensor.main_voltage_798124",
+                "sensor.mileage_798124",
+                "sensor.name_798124",
+                "binary_sensor.pluggedin_798124",
+                "sensor.satellites_798124",
+                "sensor.software_version_798124",
+                "binary_sensor.storage_798124",
+                "binary_sensor.tipover_798124",
+                "sensor.velocity_798124"
+              ],
+              "title": "Zero Motorcycles"
+            },
+            {
+              "type": "history-graph",
+              "entities": [
+                {
+                  "entity": "sensor.soc_798124"
+                }
+              ],
+              "hours_to_show": 168
+            },
+            {
+              "type": "gauge",
+              "entity": "sensor.soc_798124"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
