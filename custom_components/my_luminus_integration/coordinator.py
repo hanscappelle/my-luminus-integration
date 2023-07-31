@@ -24,7 +24,9 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
     config_entry: ConfigEntry
+
     token = None  # auth token
+    lines = []  # fetched budget lines
 
     def __init__(
         self,
@@ -56,8 +58,10 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
             LOGGER.debug("received access token from API %s", self.token)
 
             # now get some initial data to populate some sensors
-            data = {}
-            # TODO now get some actual data here
+            # we"ll start by implementing budget lines
+            data = await self.client.budget(token=self.token)
+            self.lines = data["Lines"]
+
             return data
 
         except MyLuminusApiClientAuthenticationError as exception:

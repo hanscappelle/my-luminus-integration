@@ -84,8 +84,8 @@ class MyLuminusApiClient:
         }
         """
         return await self._api_wrapper(
-            method="get",
-            headers={"authorization:", "Bearer " + token},
+            method="GET",
+            headers={"Authorization": "Bearer " + token},
             url="https://mobileapi.luminus.be/api/v11/GetContracts",
         )
 
@@ -104,7 +104,8 @@ class MyLuminusApiClient:
         }]
         """
         return await self._api_wrapper(
-            method="get",
+            method="GET",
+            headers={"Authorization": "Bearer " + token},
             url="https://mobileapi.luminus.be/api/v11/GetMetersConsumptionSources",
         )
 
@@ -147,8 +148,8 @@ class MyLuminusApiClient:
             }
         """
         return await self._api_wrapper(
-            method="get",
-            headers={"authorization:", "Bearer " + token},
+            method="GET",
+            headers={"Authorization": "Bearer " + token},
             url="https://mobileapi.luminus.be/api/v11/GetBudgetBillLines",
         )
 

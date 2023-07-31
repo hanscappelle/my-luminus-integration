@@ -14,20 +14,50 @@ from .entity import MyLuminusEntity
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
         key="my_luminus",
-        name="soc",
-        icon="mdi:battery-charging-50",
-        device_class=SensorDeviceClass.BATTERY,
+        name="NextInvoiceDate",
+        icon="mdi:receipt-text",
+        device_class=SensorDeviceClass.DATE,
     ),
     SensorEntityDescription(
         key="my_luminus",
-        name="name",
-        icon="mdi:id-card",
+        name="CurrentAmount",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
     ),
     SensorEntityDescription(
         key="my_luminus",
-        name="mileage",
-        icon="mdi:gauge",
-        device_class=SensorDeviceClass.DISTANCE,
+        name="IdealAmount",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
+    ),
+    SensorEntityDescription(
+        key="my_luminus",
+        name="MinimumAmount",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
+    ),
+    SensorEntityDescription(
+        key="my_luminus",
+        name="MaximumAmount",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
+    ),
+    SensorEntityDescription(
+        key="my_luminus",
+        name="CurrentSettlementAmount",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
+    ),
+    SensorEntityDescription(
+        key="my_luminus",
+        name="SubTotal",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
+    ),
+    SensorEntityDescription(
+        key="my_luminus",
+        name="OpenSlices",
+        icon="mdi:circle-slice-6",
     ),
 )
 
@@ -37,12 +67,12 @@ async def async_setup_entry(hass, entry, async_add_devices):
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
     # create sensors for all units found, not just the first one
-    for unit in coordinator.units:
+    for line in coordinator.lines:
         async_add_devices(
             MyLuminusSensor(
                 coordinator=coordinator,
                 entity_description=entity_description,
-                unitnumber=unit["unitnumber"],
+                line=line,
             )
             for entity_description in ENTITY_DESCRIPTIONS
         )
@@ -51,36 +81,33 @@ async def async_setup_entry(hass, entry, async_add_devices):
 class MyLuminusSensor(MyLuminusEntity, SensorEntity):
     """Sensor class."""
 
-    unitnumber: str  # each motorcycle gets this unique unit number assigned
+    ean: str  # each contract get its own ean
+    line: dict  # data for this ean
 
     def __init__(
         self,
         coordinator: MyLuminusCoordinator,
         entity_description: SensorEntityDescription,
-        unitnumber: str,
+        line: dict,
     ) -> None:
         """Initialize the sensor class."""
         super().__init__(coordinator)
-        self.unitnumber = unitnumber
+        self.ean = line["Ean"]
+        self.line = line
         # had to create unique IDs per sensor here, using key.name
-        # unitnumber = self.coordinator.units[0]["unitnumber"] # this was limited to the first unit
         self._attr_unique_id = (
-            entity_description.key + "." + unitnumber + "." + entity_description.name
+            entity_description.key + "." + self.ean + "." + entity_description.name
         )
         # make names unique per unit
-        entity_description.name = (
-            entity_description.name.split(".")[0] + "." + unitnumber
-        )
-        # entity_description.key = "unit." + unitnumber + "." + entity_description.name
+        entity_description.name = entity_description.name.split(".")[0] + "." + self.ean
         self.entity_description = entity_description
 
     @property
     def native_value(self) -> str:
         """Return the native value of the sensor."""
         sensor = self.entity_description.name
-        # unitnumber = self.coordinator.units[0]["unitnumber"] # this was limited to the first unit
-        # value = self.coordinator.data[self.unitnumber][0][sensor]
-        value = self.coordinator.data[self.unitnumber][0][sensor.split(".")[0]]
+        # value = self.coordinator.data[self.ean][0][sensor.split(".")[0]]
+        value = self.line[sensor.split(".")[0]]
         LOGGER.debug(
             "Sensor value for %s is %s",
             self.unique_id,

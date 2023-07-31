@@ -18,13 +18,13 @@ class MyLuminusEntity(CoordinatorEntity):
         super().__init__(coordinator)
 
         if not coordinator.units:
-            LOGGER.debug("no units were fetched, no devices to create here")
+            LOGGER.debug("no data fetched, no devices to create here")
         else:
             # 1 entity created with sensors repeated for all units
             self._attr_unique_id = coordinator.config_entry.entry_id
             self._attr_device_info = DeviceInfo(
-                identifiers={(DOMAIN, self.unique_id)},    
-                name="My Luminus",  # generic name, not one per unit
+                identifiers={(DOMAIN, self.unique_id)},
+                name="My Luminus",
                 model=VERSION,
                 manufacturer=NAME,
             )
