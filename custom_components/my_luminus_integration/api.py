@@ -168,6 +168,11 @@ class MyLuminusApiClient:
             "Payments": []
         }
         """
+        return await self._api_wrapper(
+            method="GET",
+            headers={"Authorization": "Bearer " + token, "Accept-Language": "nl"},
+            url="https://mobileapi.luminus.be/api/v11/GetAccountStatement",
+        )
 
     # TODO create service(?) to push inserting meter readings (from P1, manual...)
     # POST https://mobileapi.luminus.be/api/v11/InsertMeterReading

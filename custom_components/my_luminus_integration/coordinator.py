@@ -95,6 +95,9 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
 
             self.lines = data["Lines"]
 
+            # also get open amount
+            self.statements = await self.client.accountStatements(token=self.token)
+
             return data
 
         except MyLuminusApiClientAuthenticationError as exception:

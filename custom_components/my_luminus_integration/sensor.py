@@ -7,11 +7,13 @@ from homeassistant.components.sensor import (
     SensorDeviceClass,
 )
 
+from custom_components.my_luminus_integration.coordinator import MyLuminusCoordinator
+
 from .const import DOMAIN, LOGGER
 from .coordinator import MyLuminusCoordinator
 from .entity import MyLuminusEntity
 
-ENTITY_DESCRIPTIONS = (
+ENTITY_DESCRIPTIONS_LINES = (
     SensorEntityDescription(
         key="my_luminus",
         name="NextInvoiceDate",
@@ -60,6 +62,14 @@ ENTITY_DESCRIPTIONS = (
         icon="mdi:circle-slice-6",
     ),
 )
+ENTITIES_STATEMENTS = (
+    SensorEntityDescription(
+        key="my_luminus",
+        name="AmountOpen",
+        icon="mdi:cash-100",
+        device_class=SensorDeviceClass.MONETARY,
+    ),
+)
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
@@ -72,7 +82,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
     for line in coordinator.lines:
         LOGGER.debug("(0)init data for %s", line)
-        for entity_description in ENTITY_DESCRIPTIONS:
+        for entity_description in ENTITY_DESCRIPTIONS_LINES:
             # async_add_devices(
             devices.append(
                 MyLuminusSensor(
@@ -83,9 +93,41 @@ async def async_setup_entry(hass, entry, async_add_devices):
                     sensor=entity_description.name.split(".")[0],
                 )
             )
-            # for entity_description in ENTITY_DESCRIPTIONS
+            # for entity_description in ENTITY_DESCRIPTIONS_LINES
             # )
+
+    # append statement data
+    devices.append(
+        MyLuminusStatementSensor(
+            coordinator=coordinator,
+            entity_description=ENTITIES_STATEMENTS[0],
+        )
+    )
     async_add_devices(devices)
+
+
+class MyLuminusStatementSensor(MyLuminusEntity, SensorEntity):
+    """Sensor class for My Luminus open amount"""
+
+    statements: dict
+
+    def __init__(
+        self,
+        coordinator: MyLuminusCoordinator,
+        entity_description: SensorEntityDescription,
+    ) -> None:
+        """Initialize the sensor class."""
+        super().__init__(coordinator)
+        LOGGER.debug("creating sensor for open amount")
+        self.statements = coordinator.statements
+        self.entity_description = entity_description
+
+    @property
+    def native_value(self) -> str:
+        """Return the native value of the sensor."""
+        value = self.statements["AmountOpen"]["Value"]
+        LOGGER.debug("parsing amount for sensor open amount %s", value)
+        return float(value)
 
 
 class MyLuminusSensor(MyLuminusEntity, SensorEntity):
