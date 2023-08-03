@@ -153,7 +153,7 @@ class MyLuminusApiClient:
             url="https://mobileapi.luminus.be/api/v11/GetBudgetBillLines",
         )
 
-    async def accountStatements(self, token) -> any:
+    async def accountStatements(self, token, language: str = "nl") -> any:
         """
         GET https://mobileapi.luminus.be/api/v11/GetAccountStatement
 
@@ -170,7 +170,7 @@ class MyLuminusApiClient:
         """
         return await self._api_wrapper(
             method="GET",
-            headers={"Authorization": "Bearer " + token, "Accept-Language": "nl"},
+            headers={"Authorization": "Bearer " + token, "Accept-Language": language},
             url="https://mobileapi.luminus.be/api/v11/GetAccountStatement",
         )
 

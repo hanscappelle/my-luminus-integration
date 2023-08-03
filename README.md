@@ -39,6 +39,8 @@ Because we can!
 
 For now just some sensors, still figuring out how to push data to the api from within HA.
 
+* language options for now are limited to 'fr' and 'nl' because of API limitations.
+
 ## Version History
 
 # 0.1.0
@@ -47,3 +49,5 @@ initial version
 
 * get token
 * get budget lines and create some sensors
+* parse numeric values
+* also get open amount value

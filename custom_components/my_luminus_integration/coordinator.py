@@ -96,7 +96,11 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
             self.lines = data["Lines"]
 
             # also get open amount
-            self.statements = await self.client.accountStatements(token=self.token)
+            # we need a language for that but only nl and fr are supported !?
+            languageCode = self.get_valid_language(hass=self.hass)
+            self.statements = await self.client.accountStatements(
+                token=self.token, language=languageCode
+            )
 
             return data
 
@@ -104,3 +108,10 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
             raise ConfigEntryAuthFailed(exception) from exception
         except MyLuminusApiClientError as exception:
             raise UpdateFailed(exception) from exception
+
+    def get_valid_language(self, hass: HomeAssistant):
+        """helper to get a valid language"""
+        if hass.config.language == "fr":
+            return "fr"
+        else:
+            return "nl"
