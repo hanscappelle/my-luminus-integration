@@ -121,8 +121,7 @@ class MyLuminusSensor(MyLuminusEntity, SensorEntity):
     @property
     def native_value(self) -> str:
         """Return the native value of the sensor."""
-        # sensor = self.entity_description.name
-        # value = self.coordinator.data[self.ean][0][sensor.split(".")[0]]
+
         value = self.line[self.sensor]
         LOGGER.debug(
             "Sensor (id, name, value) is %s, %s, %s",
@@ -130,4 +129,10 @@ class MyLuminusSensor(MyLuminusEntity, SensorEntity):
             self.name,
             value,
         )
+        # some values are numeric, check if we can parse those
+        try:
+            value = float(value)
+        except:
+            LOGGER.debug("non numeric value received, not parsed")
+
         return value
