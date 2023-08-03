@@ -39,7 +39,7 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=60),
+            update_interval=timedelta(minutes=5),
         )
 
     async def _async_update_data(self):
@@ -60,6 +60,39 @@ class MyLuminusCoordinator(DataUpdateCoordinator):
             # now get some initial data to populate some sensors
             # we"ll start by implementing budget lines
             data = await self.client.budget(token=self.token)
+
+            """
+            # test data
+            data = {
+                "Lines": [
+                    {
+                        "Ean": "109823898932",
+                        "NextInvoiceDate": "2023-08-14",
+                        "Frequency": "Monthly",
+                        "CurrentAmount": 116.0,
+                        "IdealAmount": 192.0,
+                        "MinimumAmount": 117.0,
+                        "MaximumAmount": 1876.0,
+                        "CurrentSettlementAmount": 1755.0,
+                        "SubTotal": 1915.19,
+                        "OpenSlices": 10,
+                    },
+                    {
+                        "Ean": "2390823890",
+                        "NextInvoiceDate": "2023-08-14",
+                        "Frequency": "Monthly",
+                        "CurrentAmount": 216.0,
+                        "IdealAmount": 292.0,
+                        "MinimumAmount": 217.0,
+                        "MaximumAmount": 2876.0,
+                        "CurrentSettlementAmount": 2755.0,
+                        "SubTotal": 2915.19,
+                        "OpenSlices": 10,
+                    },
+                ]
+            }
+            """
+
             self.lines = data["Lines"]
 
             return data

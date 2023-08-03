@@ -110,11 +110,13 @@ class MyLuminusSensor(MyLuminusEntity, SensorEntity):
         self.line = line
         self.sensor = sensor
 
+        self.entity_description = entity_description
+
         # had to create unique IDs per sensor here, using key.name
         self._attr_unique_id = entity_description.key + "." + ean + "." + sensor
-        # make names unique per unit
-        entity_description.name = sensor + "." + ean
-        self.entity_description = entity_description
+        # this way sensor name no longer needs to be unique
+        self._attr_name = sensor  # + "." + ean
+        # self.entity_id = sensor  # + "." + ean
 
     @property
     def native_value(self) -> str:
@@ -123,8 +125,9 @@ class MyLuminusSensor(MyLuminusEntity, SensorEntity):
         # value = self.coordinator.data[self.ean][0][sensor.split(".")[0]]
         value = self.line[self.sensor]
         LOGGER.debug(
-            "Sensor value for %s is %s",
+            "Sensor (id, name, value) is %s, %s, %s",
             self.unique_id,
+            self.name,
             value,
         )
         return value
