@@ -44,3 +44,6 @@ For now just some sensors, still figuring out how to push data to the api from w
 # 0.1.0
 
 initial version
+
+* get token
+* get budget lines and create some sensors
