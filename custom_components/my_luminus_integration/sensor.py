@@ -7,8 +7,6 @@ from homeassistant.components.sensor import (
     SensorDeviceClass,
 )
 
-from custom_components.my_luminus_integration.coordinator import MyLuminusCoordinator
-
 from .const import DOMAIN, LOGGER
 from .coordinator import MyLuminusCoordinator
 from .entity import MyLuminusEntity
