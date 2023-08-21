@@ -23,9 +23,9 @@ PLATFORMS: list[Platform] = [
 # https://developers.home-assistant.io/docs/config_entries_index/#setting-up-an-entry
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """
-    This class is called by the HomeAssistant framework when a configuration entry is provided.
-    For us, the configuration entry is the username-password credentials that the user
-    needs to access API.
+    This class is called by the HomeAssistant framework when a configuration entry is 
+    provided. For us, the configuration entry is the username-password credentials that 
+    the user needs to access API.
     """
 
     # Retrieve the stored credentials from config-flow
