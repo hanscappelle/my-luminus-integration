@@ -172,7 +172,7 @@ class MyLuminusSensor(MyLuminusEntity, SensorEntity):
         # some values are numeric, check if we can parse those
         try:
             value = float(value)
-        except:
+        except: # noqa: E722
             LOGGER.debug("non numeric value received, not parsed")
 
         return value
