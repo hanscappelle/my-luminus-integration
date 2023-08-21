@@ -50,7 +50,8 @@ class MyLuminusApiClient:
             "refresh_token": "****"
         }
 
-        there is also a refresh option where you put grant_type=refresh_token and refresh_token=current_token
+        there is also a refresh option where you put grant_type=refresh_token 
+        and refresh_token=current_token
         """
         return await self._api_wrapper(
             method="POST",
