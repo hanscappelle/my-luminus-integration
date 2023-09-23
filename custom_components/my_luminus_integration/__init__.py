@@ -19,6 +19,8 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
 
+ATTR_PAYLOAD = "payload"
+
 
 # https://developers.home-assistant.io/docs/config_entries_index/#setting-up-an-entry
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -45,6 +47,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ),
     )
 
+    # add a service from this integration to push meter values
+    hass.services.register(DOMAIN, "publish_meter_values", handle_new_meter_values)
+
     # Initiate the coordinator. This method will also make sure to login to the API
 
     # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
@@ -54,6 +59,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     return True
+
+
+async def handle_new_meter_values(call: any) -> bool:
+    payload = call.data.get(ATTR_PAYLOAD, {})
+    hass.client
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
