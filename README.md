@@ -5,6 +5,8 @@
 This project is an attempt to create an integration to consume services provided by
 My Luminus Apps for contract and metering management.
 
+![HA sensors preview](https://github.com/hanscappelle/my-luminus-integration/blob/c0b8efacd2dd13ea6e1d9a7caf5285b3b96136f4/img/Screenshot%202023-09-23%20at%2010.34.21.png)
+
 ## How
 
 All you need for this integration to work is your My Luminus login
