@@ -2,6 +2,9 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
+WARNING! THIS INTEGRATION IS BROKEN SINCE LUMINUS DEPRECATED THIS LOGIN METHOD
+See open issues for some details on new implementation, incomplete still. 
+
 This project is an attempt to create an integration to consume services provided by
 My Luminus Apps for contract and metering management.
 
