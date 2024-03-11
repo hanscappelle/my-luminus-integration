@@ -30,6 +30,6 @@ jobs:
           zip my_luminus_integration.zip -r ./
 
       - name: "Upload the ZIP file to the release"
-        uses: softprops/action-gh-release@v0.1.15
+        uses: softprops/action-gh-release@v2.0.3
         with:
           files: ${{ github.workspace }}/custom_components/my_luminus_integration/my_luminus_integration.zip
